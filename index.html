@@ -785,37 +785,50 @@
       const now = ctx.currentTime;
       const style = soundSelect ? soundSelect.value : "classic";
 
+      const master = ctx.createGain();
+      const compressor = ctx.createDynamicsCompressor();
+
+      master.gain.setValueAtTime(1.55, now);
+      compressor.threshold.setValueAtTime(-18, now);
+      compressor.knee.setValueAtTime(20, now);
+      compressor.ratio.setValueAtTime(8, now);
+      compressor.attack.setValueAtTime(0.003, now);
+      compressor.release.setValueAtTime(0.18, now);
+
+      master.connect(compressor);
+      compressor.connect(ctx.destination);
+
       const presets = {
-        classic: {a:type==="start"?1000:720,b:type==="start"?1400:420,wave:"sine",length:.18,gap:.07,vol:.35},
-        video: {a:type==="start"?1150:850,b:type==="start"?1550:520,wave:"square",length:.22,gap:.07,vol:.34},
-        watch: {a:type==="start"?900:650,b:type==="start"?1250:450,wave:"triangle",length:.15,gap:.06,vol:.34},
-        arcade: {a:type==="start"?700:500,b:type==="start"?1200:300,wave:"square",length:.25,gap:.08,vol:.36},
-        soft: {a:type==="start"?800:600,b:type==="start"?1000:450,wave:"sine",length:.28,gap:.09,vol:.28},
-        pro: {a:type==="start"?1100:750,b:type==="start"?1700:500,wave:"triangle",length:.20,gap:.07,vol:.35},
-        sports: {a:type==="start"?1300:900,b:type==="start"?1600:600,wave:"square",length:.16,gap:.06,vol:.34},
-        casino: {a:type==="start"?1500:1000,b:type==="start"?1900:700,wave:"square",length:.14,gap:.05,vol:.34},
-        retro: {a:type==="start"?600:450,b:type==="start"?1000:300,wave:"square",length:.30,gap:.10,vol:.32},
-        phone: {a:type==="start"?950:650,b:type==="start"?1250:500,wave:"sine",length:.22,gap:.08,vol:.32},
-        robot: {a:type==="start"?500:350,b:type==="start"?1500:900,wave:"square",length:.20,gap:.06,vol:.35},
-        high: {a:type==="start"?1800:1300,b:type==="start"?2200:900,wave:"sine",length:.12,gap:.05,vol:.30},
-        low: {a:type==="start"?450:300,b:type==="start"?700:200,wave:"triangle",length:.35,gap:.10,vol:.40},
-        alarm: {a:type==="start"?1000:1000,b:type==="start"?700:500,wave:"square",length:.40,gap:.12,vol:.34},
-        clean: {a:type==="start"?900:700,b:type==="start"?1200:600,wave:"sine",length:.18,gap:.07,vol:.30},
-        soft2: {a:type==="start"?1100:800,b:type==="start"?1500:1000,wave:"sine",length:.16,gap:.06,vol:.28},
-        deep: {a:type==="start"?450:300,b:type==="start"?700:500,wave:"triangle",length:.28,gap:.08,vol:.42},
-        dual: {a:type==="start"?1000:600,b:type==="start"?1400:800,wave:"square",length:.20,gap:.07,vol:.35},
-        echo: {a:type==="start"?900:700,b:type==="start"?1200:850,wave:"sine",length:.30,gap:.13,vol:.28},
-        short: {a:type==="start"?1300:900,b:type==="start"?1700:1100,wave:"square",length:.12,gap:.05,vol:.34},
-        metallic: {a:type==="start"?1500:1000,b:type==="start"?2000:1200,wave:"square",length:.20,gap:.06,vol:.31},
-        alarm2: {a:type==="start"?1200:800,b:type==="start"?1600:900,wave:"sine",length:.25,gap:.09,vol:.36},
-        vintage: {a:type==="start"?800:600,b:type==="start"?1100:700,wave:"square",length:.28,gap:.10,vol:.31},
-        "sci-fi": {a:type==="start"?1800:1400,b:type==="start"?2200:1600,wave:"triangle",length:.15,gap:.05,vol:.32},
-        pulse: {a:type==="start"?760:520,b:type==="start"?760:380,wave:"sine",length:.10,gap:.11,vol:.38},
-        laser: {a:type==="start"?2100:1600,b:type==="start"?1200:800,wave:"sawtooth",length:.16,gap:.05,vol:.22},
-        bell: {a:type==="start"?1050:760,b:type==="start"?2100:1520,wave:"sine",length:.32,gap:.04,vol:.24},
-        pop: {a:type==="start"?650:480,b:type==="start"?1450:900,wave:"triangle",length:.09,gap:.035,vol:.42},
-        tick: {a:type==="start"?1500:1100,b:type==="start"?1500:800,wave:"square",length:.06,gap:.045,vol:.25},
-        bright: {a:type==="start"?1600:1200,b:type==="start"?2400:1700,wave:"sine",length:.14,gap:.055,vol:.30}
+        classic: {a:type==="start"?1000:720,b:type==="start"?1400:420,wave:"sine",length:.18,gap:.07,vol:.58},
+        video: {a:type==="start"?1150:850,b:type==="start"?1550:520,wave:"square",length:.22,gap:.07,vol:.56},
+        watch: {a:type==="start"?900:650,b:type==="start"?1250:450,wave:"triangle",length:.15,gap:.06,vol:.56},
+        arcade: {a:type==="start"?700:500,b:type==="start"?1200:300,wave:"square",length:.25,gap:.08,vol:.60},
+        soft: {a:type==="start"?800:600,b:type==="start"?1000:450,wave:"sine",length:.28,gap:.09,vol:.48},
+        pro: {a:type==="start"?1100:750,b:type==="start"?1700:500,wave:"triangle",length:.20,gap:.07,vol:.58},
+        sports: {a:type==="start"?1300:900,b:type==="start"?1600:600,wave:"square",length:.16,gap:.06,vol:.58},
+        casino: {a:type==="start"?1500:1000,b:type==="start"?1900:700,wave:"square",length:.14,gap:.05,vol:.58},
+        retro: {a:type==="start"?600:450,b:type==="start"?1000:300,wave:"square",length:.30,gap:.10,vol:.54},
+        phone: {a:type==="start"?950:650,b:type==="start"?1250:500,wave:"sine",length:.22,gap:.08,vol:.54},
+        robot: {a:type==="start"?500:350,b:type==="start"?1500:900,wave:"square",length:.20,gap:.06,vol:.58},
+        high: {a:type==="start"?1800:1300,b:type==="start"?2200:900,wave:"sine",length:.12,gap:.05,vol:.50},
+        low: {a:type==="start"?450:300,b:type==="start"?700:200,wave:"triangle",length:.35,gap:.10,vol:.68},
+        alarm: {a:type==="start"?1000:1000,b:type==="start"?700:500,wave:"square",length:.40,gap:.12,vol:.58},
+        clean: {a:type==="start"?900:700,b:type==="start"?1200:600,wave:"sine",length:.18,gap:.07,vol:.52},
+        soft2: {a:type==="start"?1100:800,b:type==="start"?1500:1000,wave:"sine",length:.16,gap:.06,vol:.50},
+        deep: {a:type==="start"?450:300,b:type==="start"?700:500,wave:"triangle",length:.28,gap:.08,vol:.70},
+        dual: {a:type==="start"?1000:600,b:type==="start"?1400:800,wave:"square",length:.20,gap:.07,vol:.58},
+        echo: {a:type==="start"?900:700,b:type==="start"?1200:850,wave:"sine",length:.30,gap:.13,vol:.50},
+        short: {a:type==="start"?1300:900,b:type==="start"?1700:1100,wave:"square",length:.12,gap:.05,vol:.58},
+        metallic: {a:type==="start"?1500:1000,b:type==="start"?2000:1200,wave:"square",length:.20,gap:.06,vol:.54},
+        alarm2: {a:type==="start"?1200:800,b:type==="start"?1600:900,wave:"sine",length:.25,gap:.09,vol:.60},
+        vintage: {a:type==="start"?800:600,b:type==="start"?1100:700,wave:"square",length:.28,gap:.10,vol:.54},
+        "sci-fi": {a:type==="start"?1800:1400,b:type==="start"?2200:1600,wave:"triangle",length:.15,gap:.05,vol:.54},
+        pulse: {a:type==="start"?760:520,b:type==="start"?760:380,wave:"sine",length:.10,gap:.11,vol:.62},
+        laser: {a:type==="start"?2100:1600,b:type==="start"?1200:800,wave:"sawtooth",length:.16,gap:.05,vol:.42},
+        bell: {a:type==="start"?1050:760,b:type==="start"?2100:1520,wave:"sine",length:.32,gap:.04,vol:.42},
+        pop: {a:type==="start"?650:480,b:type==="start"?1450:900,wave:"triangle",length:.09,gap:.035,vol:.68},
+        tick: {a:type==="start"?1500:1100,b:type==="start"?1500:800,wave:"square",length:.06,gap:.045,vol:.45},
+        bright: {a:type==="start"?1600:1200,b:type==="start"?2400:1700,wave:"sine",length:.14,gap:.055,vol:.52}
       };
 
       const p = presets[style] || presets.classic;
@@ -830,80 +843,20 @@
         osc.frequency.setValueAtTime(freq, t);
 
         filter.type = "lowpass";
-        filter.frequency.setValueAtTime(3600, t);
+        filter.frequency.setValueAtTime(4200, t);
 
         gain.gain.setValueAtTime(0.0001, t);
-        gain.gain.exponentialRampToValueAtTime(p.vol, t + 0.008);
-        gain.gain.exponentialRampToValueAtTime(p.vol * 0.45, t + (p.length * 0.55));
+        gain.gain.exponentialRampToValueAtTime(p.vol, t + 0.006);
+        gain.gain.exponentialRampToValueAtTime(p.vol * 0.55, t + (p.length * 0.55));
         gain.gain.exponentialRampToValueAtTime(0.0001, t + p.length);
 
         osc.connect(filter);
         filter.connect(gain);
-        gain.connect(ctx.destination);
+        gain.connect(master);
 
         osc.start(t);
         osc.stop(t + p.length + 0.02);
       });
-    }
-
-    function playSinglePlayerRevealSound() {
-      const ctx = getAudioContext();
-      if (!ctx) return;
-
-      if (ctx.state === "suspended") ctx.resume();
-
-      const now = ctx.currentTime;
-
-      // Bus-door style reveal sound:
-      // soft door chime + short rising "open" sweep.
-      function chime(freq, start, duration, volume) {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(freq, now + start);
-
-        gain.gain.setValueAtTime(0.0001, now + start);
-        gain.gain.exponentialRampToValueAtTime(volume, now + start + 0.018);
-        gain.gain.exponentialRampToValueAtTime(volume * 0.45, now + start + duration * 0.45);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + start + duration);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now + start);
-        osc.stop(now + start + duration + 0.03);
-      }
-
-      function sweep() {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
-
-        osc.type = "triangle";
-        osc.frequency.setValueAtTime(260, now + 0.05);
-        osc.frequency.exponentialRampToValueAtTime(760, now + 0.55);
-
-        filter.type = "lowpass";
-        filter.frequency.setValueAtTime(1400, now + 0.05);
-        filter.frequency.exponentialRampToValueAtTime(2600, now + 0.55);
-
-        gain.gain.setValueAtTime(0.0001, now + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.18, now + 0.10);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.62);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now + 0.05);
-        osc.stop(now + 0.65);
-      }
-
-      // Ding-dong style bus/open-door chime.
-      chime(880, 0.00, 0.28, 0.28);
-      chime(660, 0.18, 0.34, 0.26);
-      sweep();
     }
 
     function shouldPlayTimerSound(id) {
@@ -941,9 +894,8 @@
     function toggleTimer(id) {
       const t = timers[id];
 
-      // 1 Player Guess the Time only:
-      // If Mystery Cover is ON and the player already stopped,
-      // the next click reveals the hidden time instead of restarting.
+      // 1 Player: Guess the Time only.
+      // After stopping with Mystery Cover ON, the next Space/click reveals the time.
       if (
         modeEl.value === "singleGuess" &&
         id === "p1" &&
@@ -954,8 +906,10 @@
       ) {
         playSinglePlayerRevealSound();
         revealTimer(id);
-        updateDisplay();
-        evaluate();
+        setTimeout(() => {
+          updateDisplay();
+          evaluate();
+        }, 1550);
         return;
       }
 
@@ -978,12 +932,12 @@
       }
 
       if (soundType === "stop") {
-        // In 1 Player Guess the Time, do not reveal immediately.
-        // Let the player guess first, then reveal on the next click.
+        // True Guess mode should NOT reveal immediately.
+        // Match Given Time and all 2-player modes keep the normal reveal behavior.
         if (!(modeEl.value === "singleGuess" && id === "p1" && coverToggle.checked)) {
           revealTimer(id);
 
-          // For 1 Player Match Given Time, wait for cover animation before showing the final score.
+          // 1 Player: Match Given Time reveals automatically after the cover animation.
           if (modeEl.value === "singleTarget" && id === "p1" && coverToggle.checked) {
             setTimeout(() => {
               updateDisplay();
@@ -1106,6 +1060,7 @@
         if (d2 < d1) winner = "Player 2 wins!";
 
         result.innerHTML = `<span class="winner">${winner}</span><span class="score-line score-small">${scoreLine("Player 1", p1, target)}</span><span class="score-line score-small">${scoreLine("Player 2", p2, target)}</span>`;
+        return;
       }
 
       if (mode === "copy") {
@@ -1133,18 +1088,18 @@
 
     function setMode() {
       const mode = modeEl.value;
-      const isSingleMode = mode === "singleGuess" || mode === "singleTarget";
+      const isOnePlayer = mode === "singleGuess" || mode === "singleTarget";
 
       timersContainer.className = "gamearea " + (
-        isSingleMode ? "single-layout" :
+        isOnePlayer ? "single-layout" :
         mode === "versus" ? "two-layout" :
         "copy-layout"
       );
 
       cards.host.classList.toggle("hidden", mode !== "copy");
-      cards.p2.classList.toggle("hidden", isSingleMode);
+      cards.p2.classList.toggle("hidden", isOnePlayer);
 
-      // Target time is only needed for matching modes, not true Guess the Time and not Copy Host.
+      // Target time is hidden only for true Guess the Time and Copy Host Time.
       targetBox.style.display = (mode === "singleTarget" || mode === "versus") ? "block" : "none";
 
       if (mode === "singleGuess") {
@@ -1206,7 +1161,7 @@
     document.getElementById("resetBtn").addEventListener("click", resetGame);
     hostToggle.addEventListener("click", () => toggleTimer("host"));
     p1Toggle.addEventListener("click", () => {
-      if (modeEl.value === "single") toggleTimer("p1");
+      if ((modeEl.value === "singleGuess" || modeEl.value === "singleTarget")) toggleTimer("p1");
       else toggleTimer("p1");
     });
     p2Toggle.addEventListener("click", () => toggleTimer("p2"));
