@@ -1,4 +1,4 @@
-const CACHE_NAME = 'timer-challenge-mobile-pwa-v2-touch';
+const CACHE_NAME = 'timer-challenge-mobile-pwa-v3-multitouch';
 const CORE_ASSETS = [
   './',
   './index.html',
